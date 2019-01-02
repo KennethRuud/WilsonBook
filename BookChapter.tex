@@ -43,6 +43,10 @@
 \usepackage{graphicx}% Include figure files
 \usepackage{dcolumn}% Align table columns on decimal point
 \usepackage{bm}% bold math
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{color}
 %\usepackage{hyperref}% add hypertext capabilities
 %\usepackage[mathlines]{lineno}% Enable numbering of text and display math
 %\linenumbers\relax % Commence numbering lines
@@ -76,10 +80,55 @@
 \author{Simen Reine}
 \affiliation{%
  Hylleraas Centre for Quantum Molecular Sciences, Department of Chemistry, University of Oslo, P.O.Box 1033 Blindern, 0315 Oslo, Norway} 
-}%
+%
 
 \date{\today}% It is always \today, today,
              %  but any date may be explicitly specified
+
+
+\def\im{\mathrm{i}}
+\def\ket#1{|#1\rangle}
+\def\bra#1{\langle#1|}
+\def\brau#1{\langle#1}
+\def\bfr{{\bf r}}
+\def\bfx{{\bf x}}
+\def\bfX{{\bf X}}
+\def\bfS{{\bf S}}
+\def\bfD{{\bf D}}
+\def\bfG{{\bf G}}
+\def\bfc{{\bf c}}
+\def\barx{{\bf \bar x}}
+\def\barD{{\bf \bar D}}
+\def\tildeD{{\bf \tilde D}}
+\def\bfEone#1{{\bf E_{#1}^{(1)}}}
+\def\bfF#1{{\bf F_{#1}}}
+\def\bfeone{{\bf e^{(1)}}}
+\def\bfEtwo#1{{\bf E_{#1}^{(2)}}}
+\def\bfetwo{{\bf e^{(2)}}}
+\def\bfkappa{{\boldsymbol \kappa}}
+\def\bfs{\boldsymbol}
+\def\Kappa{{K}}
+\def\sgn{\text{sgn}}
+\def\vec{\text{vec}}
+\def\tildex{{\bf \tilde x}}
+\def\expectation#1#2{\langle#1|#2\rangle}
+\def\Tr{\mbox{Tr}}
+\def\bfL{{\boldsymbol \Gamma}}
+\def\Ld{\Gamma^{\dagger}}
+\def\bm#1{\mbox{\boldmath $ #1 $}}
+% Macro for expectation value <0|[#1,#2]0>
+\def\expc#1#2{\bra{0}[#1,#2]\ket{0}}
+% Macro for expectation value <0|[[#1,#2],#3]0>
+\def\expcc#1#2#3{\bra{0}[[#1,#2],#3]\ket{0}}
+% Macro for expectation value <0|[#1,[#2,#3]]0>
+\def\expccr#1#2#3{\bra{0}[#1,[#2,#3]]\ket{0}}
+% Macro for expectation value <0|[[[#1,#2],#3],#4]0>
+\def\expccc#1#2#3#4{\bra{0}[[[#1,#2],#3],#4]\ket{0}}
+% Macro for expectation value <0|[[[#1,#2],#3],#4]0>
+\def\expcccr#1#2#3#4{\bra{0}[#1,[#2,[#3,#4]]]\ket{0}}
+
+\newcommand{\fixme}[1]{{\small\em \color{red} \marginpar{\mbox{$\Longleftarrow$}} #1 \normalsize}}
+
 
 \begin{abstract}
 An article usually includes an abstract, a concise summary of the work
@@ -107,7 +156,334 @@ covered at length in the main body of the article.
 
 
 \section{\label{sec:MolProp}Molecular Properties as energy derivatives}
+\subsection{Open-ended response theory}
+\label{rsp_theory}
 
+In this section, we will review the open-ended formulation of response theory that underlies our recursive implementation. In this formulation, response properties are expressed as perturbation-strength derivatives of a quasienergy Lagrangian gradient $\tilde{L}^a$, where the superscripted $a$ denotes such differentiation with respect to the perturbation represented by the operator $A$ and associated with the frequency $\omega_{a}$, and where further such differentiation will for this and other quantities be represented as $\tilde{L}^{abc\cdots}$, where $b, c, \ldots$ symbolize further perturbations with respective associated frequencies $\omega_{b}, \omega_{c}, \ldots$, and where furthermore, we adopt the convention that a diacritical tilde ($\sim$) signifies that the quantity in question is evaluated at general perturbation strengths, while the absence of such a tilde denotes evaluation at zero perturbation strengths. We may then for example express a linear response property $\langle \langle A ; B \rangle \rangle_{\omega_{b}}$ as 
+\begin{equation}
+\label{LRF-D}
+\langle \langle A ; B \rangle \rangle_{\omega_{b}} =
+\frac{d { \{ \tilde{L}^a (\tilde{\mathbf{D}}, t) \} }_T }
+{d\varepsilon_b} \biggr{\vert}_{
+\{ \varepsilon \} = 0 } = L^{ab} \text{ ; } \qquad
+\omega_a = -\omega_{b}\text{,}
+\end{equation}
+where $\vert_{ \{ \varepsilon \} = 0 }$ denotes evaluation at zero field strength, and where
+\begin{equation}\label{La}
+\tilde{L}^a (\tilde{\mathbf{D}}, t) \stackrel{\,^{\{\mathrm{Tr}\}_T}}{=} 
+\tilde{\mathcal{E}}^{0, a} -  \tilde{\mathbf{S}}^a \tilde{\mathbf{W}}\text{,}
+\end{equation}
+where we have introduced the generalized Kohn-Sham energy $\tilde{\mathcal{E}}$ as
+\begin{eqnarray}\nonumber
+\tilde{\mathcal{E}} &\stackrel{\,^{\{\mathrm{Tr}\}_T}}{=}&
+\tilde{E}(\tilde{\mathbf{D}}, t) - 
+{\textstyle \frac{i}{2}} \tilde{\mathbf{T}} \tilde{\mathbf{D}} \\ \label{G-EKS} &\stackrel{\,^{\{\mathrm{Tr}\}_T}}{=}&
+ \bigl( \tilde{\mathbf{h}} + \tilde{\mathbf{V}}^t +
+{\textstyle \frac{1}{2}}
+\tilde{\mathbf{G}}^{\gamma}(\tilde{\mathbf{D}}) 
+ - {\textstyle \frac{i}{2}} \tilde{\mathbf{T}} \bigr) \tilde{\mathbf{D}} + \tilde{E}_{xc}[\tilde{\rho}(\tilde{\mathbf{D}})]
++ \tilde{h}_{nuc}\text{,}
+\end{eqnarray}
+and where the integer in the superscript notation of $\tilde{\mathcal{E}}^{m, abc}$ denotes chain rule differentiation with respect to the density matrix $\tilde{\mathbf{D}}$, so that, in general, taking $n$ to be the total number of perturbations in the collection $a, b, c, \ldots$, 
+\begin{equation}\label{E-chain-rule}
+\tilde{\mathcal{E}}^{m, abc\cdots} \equiv \frac{\partial^{m + n}\tilde{\mathcal{E}}}{ \left( \partial \tilde{\mathbf{D}} \right)^{m} \partial \varepsilon_{a} \partial \varepsilon_{b} \partial \varepsilon_{c} \cdots}\text{.}
+\end{equation}
+We have furthermore introduced the overlap matrix $\tilde{\mathbf{S}}$ defined in a basis of atomic orbitals $\ket{\tilde{\chi}_{i}}$ as 
+\begin{equation}\label{S}
+\tilde{S}_{\mu \nu} = \brau{\tilde{\chi}_{\mu}} \ket{\tilde{\chi}_{\nu}} \text{,}
+\end{equation}
+and the generalized energy-weighted density matrix $\tilde{\mathbf{W}}$ as 
+\begin{equation}\label{W}
+\tilde{\mathbf{W}} =
+\tilde{\mathbf{D}} \tilde{\bm{\mathcal{F}}} \tilde{\mathbf{D}} +
+{\textstyle \frac{i}{2}} \bigl(
+\dot{\tilde{\mathbf{D}}} \tilde{\mathbf{S}} \tilde{\mathbf{D}}
+-\tilde{\mathbf{D}} \tilde{\mathbf{S}} \dot{\tilde{\mathbf{D}}}
+\bigr)\text{,}
+\end{equation}
+where the generalized Kohn-Sham Fock matrix $\tilde{\bm{\mathcal{F}}}$ is given by
+\begin{equation}\label{KSG}
+\tilde{\bm{\mathcal{F}}} = \tilde{\mathbf{F}} - {\textstyle \frac{i}{2}} \tilde{\mathbf{T}} =
+\tilde{\mathbf{h}} +
+\tilde{\mathbf{G}}^{\gamma} (\tilde{\mathbf{D}}) 
++ \tilde{\mathbf{V}}^t + \tilde{\mathbf{F}}_{xc} - {\textstyle \frac{i}{2}} \tilde{\mathbf{T}}\text{.}
+\end{equation}
+The quantities introduced in Eqs.~\eqref{G-EKS} and \eqref{KSG} are firstly the so-called half-time-differentiated overlap matrix $\tilde{\mathbf{T}}$, the one-electron matrix $\tilde{\mathbf{h}}$, the external potential matrix $\tilde{\mathbf{V}^{t}}$, the two-electron matrix $\tilde{\mathbf{G}}^{\gamma}$ with exchange contribution scaled by a factor $\gamma \in [0,1]$, given by the matrix elements
+\begin{eqnarray}
+\label{t-matrix}
+\tilde{T}_{\mu \nu} &=& \brau{\tilde{\chi}_{\mu}} \ket{\dot{\tilde{\chi}}_{\nu}} - \brau{\dot{\tilde{\chi}}_{\mu}} \ket{\tilde{\chi}_{\nu}} \\
+\label{h-matrix}
+\tilde{h}_{\mu \nu} &=& \biggr{\langle} \tilde{\chi}_{\mu} \biggr{|}  
+- {\textstyle \frac{1}{2}} \nabla^2 - \sum_K \frac{Z_K}{|\mathbf{R}_K-\mathbf{r}|} 
+\biggr{|} \tilde{\chi}_{\nu} \biggr{\rangle} \\ \label{Vt_munu}
+\tilde{V}^t_{\mu \nu} &=& 
+\sum_{p} \exp(-i \omega_p t) \varepsilon_{p} 
+\bra{\tilde{\chi}_{\mu}} 
+P
+\ket{\tilde{\chi}_{\nu}} \\
+\label{G-matrix}
+\tilde{G}^{\gamma}_{\mu \nu}(\mathbf{M}) &=& \sum_{\alpha \beta} M_{\beta \alpha} (\tilde{g}_{\mu \nu \alpha \beta} - \gamma \tilde{g}_{\mu \beta \alpha \nu}) \text{,}
+\end{eqnarray}
+where the summation in Eq.~\eqref{h-matrix} runs over nuclei $K$ located at positions $\mathbf{R}_{K}$ with charges $Z_{K}$ and the summation in Eq.~\eqref{Vt_munu} runs over all \fixme{perturbing?} operators. Furthermore, we introduced in Eq.~\eqref{G-EKS} a nuclear potential contribution $\tilde{h}_{nuc}$ and the exchange--correlation contribution to the energy as $\tilde{E}_{xc}[\tilde{\rho}(\tilde{\mathbf{D}})]$ for a density $\rho$, and in Eq.~\eqref{KSG} we introduced the exchange--correlation contribution to the Fock matrix as $\tilde{\mathbf{F}}_{xc}$. \fixme{MaR: I have not given a definition for $F_{xc}$ but it can be reinstated} 
+
+From the definition of $\tilde{L}^{a}$ in Eq.~\eqref{La}, and letting the tracing of energy derivatives where the chain rule was applied be exemplified as
+\begin{equation}\label{trEchain}
+\text{Tr}\mathcal{E}^{2, a}(\mathbf{D}^{b})\mathbf{D}^{c} = \sum_{\alpha \beta \mu \nu} \frac{\partial^{3} \mathcal{E}}{\partial D^{T}_{\alpha \beta} D^{T}_{\mu \nu} \partial \varepsilon_{a}} D^{b}_{\alpha \beta} D^{c}_{\mu \nu} \text{,}
+\end{equation}
+linear and quadratic response functions $L^{ab}$ and $L^{abc}$ can be written down as
+\begin{eqnarray}
+L^{ab} & \stackrel{\,^{\{\mathrm{Tr}\}_T}}{=} &  \mathcal{E}^{0,ab}+\bm{\mathcal{E}}^{1,a}\mathbf{D}^{b}-\mathbf{S}^{ab}\mathbf{W}-\mathbf{S}^{a}\mathbf{W}^{b}\label{QagraD}\\
+L^{abc} & \stackrel{\,^{\{\mathrm{Tr}\}_T}}{=} &  \mathcal{E}^{0,abc}+\bm{\mathcal{E}}^{1,ac}\mathbf{D}^{b}+\bm{\mathcal{E}}^{1,ab}\mathbf{D}^{c}+\bm{\mathcal{E}}^{2,a}\!(\mathbf{D}^{b})\mathbf{D}^{c}\nonumber \\
+ &+&  \bm{\mathcal{E}}^{1,a}\mathbf{D}^{bc}-\mathbf{S}^{abc}\mathbf{W}-\mathbf{S}^{ab}\mathbf{W}^{c}-\mathbf{S}^{ac}\mathbf{W}^{b}-\mathbf{S}^{a}\mathbf{W}^{bc}\label{QabgraD} \text{,}
+\end{eqnarray}
+where higher-order responses may be derived by straightforward further manipulation. Response functions derived in this form follow the so-called $(n + 1)$ rule \fixme{cite}, where, in order to evaluate the expression for a property of order $(n + 1)$, it is necessary to provide quantities such as the density matrix perturbed to order $n$ \fixme{or ``perturbative corrections to e.g. the density matrix''?}. However, it is also possible to increase the flexibility of the formalism to encompass regimes with other requirements concerning which perturbed quantities must be provided in order to evaluate the expression for the property, \textit{i.e.} allowing for other so-called calculation rules. This may be achieved by the introduction of Lagrange multipliers for both the density matrix idempotency condition given as
+\begin{eqnarray}\label{idempotency}
+\tilde{\mathbf{D}} \tilde{\mathbf{S}} \tilde{\mathbf{D}} - \tilde{\mathbf{D}} = \mathbf{0} \equiv \tilde{\mathbf{Z}}
+\text{,}
+\end{eqnarray}
+and for the so-called time-dependent self-consistent field (TDSCF) condition, given as
+\begin{eqnarray}\label{TDSCF}
+\bigr[\bigl(\tilde{\bm{\mathcal{F}}} - {\textstyle \frac{i}{2}} \tilde{\mathbf{S}} 
+\!{\textstyle \frac{d}{dt}} \bigr) \tilde{\mathbf{D}} \tilde{\mathbf{S}} \bigr]^{\negmedspace\circleddash} = \mathbf{0} \equiv \tilde{\mathbf{Y}}
+\text{,}
+\end{eqnarray}
+where, for some matrix $\mathbf{M}$, $[\mathbf{M}]^{\negmedspace\circleddash} \equiv \mathbf{M} - \mathbf{M}^{\dagger}$ (and $[\mathbf{M}]^{\negmedspace\oplus} \equiv \mathbf{M} + \mathbf{M}^{\dagger}$), where adjungation is defined to take place before any perturbation \fixme{field?} strength differentiation. 
+Appropriate Lagrange multipliers can be found from the ansatz
+\begin{equation}
+\tilde{\bm{\lambda}}_a = \tilde{\mathbf{D}}^{a}\tilde{\mathbf{S}} \tilde{\mathbf{D}}-\tilde{\mathbf{D}} \tilde{\mathbf{S}} \tilde{\mathbf{D}}^{a}=[\tilde{\mathbf{D}}^{a}\tilde{\mathbf{S}} \tilde{\mathbf{D}}]^{\!\ominus} \label{LagrMulXg} \text{,}
+\end{equation}
+where $\tilde{\bm{\lambda}}_{a}$ is the multiplier for $\tilde{\mathbf{Y}}$, from which it can be shown \fixme{cite} that the multiplier $\tilde{\bm{\zeta}}_a$ for $\tilde{\mathbf{Z}}$ may be determined as
+\begin{equation}
+\tilde{\bm{\zeta}}_a=\bigl[\tilde{\bm{\mathcal{F}}}^{a}(\tilde{\mathbf{D}} \tilde{\mathbf{S}}\!-\!{\textstyle \mathbf{\frac{1}{2}}})-(\tilde{\bm{\mathcal{F}}} \tilde{\mathbf{D}}\!-{\textstyle \frac{i}{2}}\dot{\tilde{\mathbf{S}}} \tilde{\mathbf{D}}
+\!-\! i\tilde{\mathbf{S}} \dot{\tilde{\mathbf{D}}})\tilde{\mathbf{S}}^{a}\bigr]^{\negmedspace\oplus}\label{LagrMulLg}
+\end{equation}
+With these definitions, it can be shown \fixme{cite} that an arbitrary response property $\langle \langle A ; B, C, \ldots \rangle \rangle_{\omega_{bc\cdots}}$, where $\omega_{bc\cdots}$ denotes the frequencies associated with perturbations $b, c, \ldots$, may be expressed as
+\begin{equation}\label{master}
+\langle \langle A ; B, C, \ldots \rangle \rangle_{\omega_{bc\cdots}} = \mathcal{L}_{k,n}^{abc\cdots} \stackrel{\,^{\{\mathrm{Tr}\}_T}}{=} \mathcal{E}_{k,n}^{abc\cdots} - (\mathbf{SW})_{n_{W}}^{abc\cdots} - (\mathbf{S}^{a}\mathbf{W})_{k_{S},n'_{W}}^{bc\cdots} - (\mathbf{\lambda}_{a}\mathbf{Y})_{k_{\lambda},n'_{Y}}^{bc\cdots} - (\mathbf{\zeta}_{a}\mathbf{Z})_{k_{\zeta},n'_{Z}}^{bc\cdots}\text{,}
+\end{equation}
+where the integers $k$ and $n$, in the various forms in which they appear in the subscripts of the terms in Eq.~\eqref{master}, denote a particular choice of calculation rule: Eq.~\eqref{master} contains various terms that are \textit{perturbed} or differentiated with respect to perturbation strengths. Straightforward such differentiation would yield terms which may contain the matrices $\mathbf{F}$, $\mathbf{D}$, $\mathbf{S}$, or quantities composed of these matrices, perturbed to orders up to the full number of operators defining the property. However, the calculation rule allows for truncation of the terms thus obtained, so that terms which contain these matrices or quantities perturbed to certain higher orders may be disregarded. The result is that some perturbed matrices or quantitites need not be calculated in order to be able to evaluate the desired response property. Since such calculation is typically a costly part of the calculation, different choices of calculation rule, resulting in different truncation regimes, may have a substantial impact on the total computation time needed.
+
+The way in which such truncation may be carried out is determined by the choice of values of $k$ and $n$, whose meaning will be explained below and whose choice is made in the following manner: Let $N$ denote the total order of perturbation-strength differentiation for the property in question, i.e. the total order of operators inside the response brackets $\langle \langle A ; B, C, \ldots \rangle \rangle_{\omega_{bc\cdots}}$. 
+The value of $k$ may be chosen freely as an integer in the interval $\left[ 0, \frac{N - 1}{2} \right]$, where $\frac{N - 1}{2}$ is rounded down for even $N$ \fixme{MaR: Actually, I think the AJT article allows $N/2$  and round down for odd $N$ but we have restricted this in OpenRSP - I think this was done because I thought there wasn't much practical difference between the additional rule choice and the next, but there is in fact a difference at least if not all of the perturbations are equal}. The relation $k + n = N - 1$ is true for all values of $N$ and can be used to determine the corresponding value of $n$ for a particular choice of $k$, so that the calculation rule choice is fully determined by the choice of $k$. The choice $k = 0$ corresponds to using the previously mentioned $(n + 1)$ rule, while choosing the maximum allowable value of $k$ corresponds to using the so-called $(2n + 1)$ rule \fixme{cite}, while other choices of $k$, if possible at the order of perturbation considered, are intermediate between these extremes.
+
+The meaning of $k$ and $n$ is as follows: Let $abcd\cdots$ denote the set or \textit{tuple} of operators that define the response property in question. The value of $k$, depending on particular way in which it is applied to a given term in Eq.~\eqref{master}, denotes the maximum order of perturbation that must be considered for $\mathbf{F}$, $\mathbf{D}$, $\mathbf{S}$, or quantities composed of these matrices, when the collection of perturbations considered in this manner --- a subset of $abcd\cdots$ --- includes the perturbation chosen to be perturbation $a$, so that terms that contain such matrices or quantities perturbed to higher orders (if $a$ is among those perturbations) may be disregarded. The value of $n$ denotes the corresponding maximum necessary order of perturbation when the collection of perturbations considered does not include perturbation $a$.
+
+Applied to the terms on the right-hand side of Eq.~\eqref{master}, for the \textit{energy contribution} $\mathcal{E}_{k,n}^{abc\cdots}$, the $(k,n)$ subscript pertains to perturbed $\mathbf{D}$ matrices and terms with perturbed $\mathbf{D}$ matrices that do not fulfill the $(k,n)$ condition are thus disregarded. An example of this can be found in Eq.~\eqref{QabgraD}, where the first five terms on the right-hand side together constitute the term $\mathcal{E}_{0,2}^{abc}$. For the \textit{Pulay ``n'' contribution} \fixme{cite? and should it instead be the ``Pulay n contribution`` as I have sometimes called it to distinguish it from the Pulay Lagrangian-style term?} $(\mathbf{SW})_{n_{W}}^{abc\cdots}$, the truncation dictated by $n$ is applied to $\mathbf{W}$. For the \textit{Pulay ``Lagrange'' contribution} $(\mathbf{S}^{a}\mathbf{W})_{k_{S},n'_{W}}^{bc\cdots}$, the \textit{TDSCF Lagrange contribution} $(\mathbf{\lambda}_{a}\mathbf{Y})_{k_{\lambda},n'_{Y}}^{bc\cdots}$ and the \textit{idempotency Lagrange contribution} $(\mathbf{\zeta}_{a}\mathbf{Z})_{k_{\zeta},n'_{Z}}^{bc\cdots}$, the truncation induced by $k$ is applied to the first matrix in each of these terms, while the $n$ truncation is applied to the second matrix, where, additionally, the use of a prime superscript on e.g. the subscript $n'_{W}$ denotes that the $n$ condition applies to the constituent matrices $\mathbf{F}$, $\mathbf{D}$ and $\mathbf{S}$ of $\mathbf{W}$ and not just to $\mathbf{W}$ itself.
+
+The calculation of perturbed $\mathbf{F}$ and $\mathbf{D}$ matrices may be carried out in an order-by-order fashion. Letting $b_{N}$ and $\omega_{b_{N}}$ denote, respectively a collection of $N$ perturbations and the sum of their associated frequencies, and defining $\mathbf{D}^{b_N}_{\omega} \equiv \exp{i \omega_{b_{N}} t}\mathbf{D}^{b_N}$, the differentiation of Eq.~\eqref{idempotency} may be written on the general form
+\begin{equation}\label{Dbn-idem}
+\mathbf{D}^{b_N}_{\omega} \mathbf{S} \mathbf{D} + \mathbf{D} \mathbf{S} \mathbf{D}^{b_N}_{\omega} - \mathbf{D}^{b_N}_{\omega} = 
+\mathbf{K}^{(N-1)}_{\omega} \text{,}
+\end{equation}
+where
+\begin{equation}\label{Knminus1}
+\mathbf{K}^{(N-1)}_{\omega} = - (\mathbf{DSD})^{b_N}_{\omega,(N-1)}\text{,}
+\end{equation}
+where the subscript $(N - 1)$ signifies that only terms containing density matrices perturbed up to order $(N - 1)$ are kept. By the use of projection matrices \fixme{maybe more detail?}, the perturbed density matrix $\mathbf{D}^{b_N}_{\omega}$ may, with respect to its role as a solution of Eq.~\eqref{Dbn-idem}, be separated into a particular and homogeneous part $\mathbf{D}_{P}^{b_N}$ and $\mathbf{D}_{H}^{b_N}$, respectively, as
+\begin{equation}\label{D-partitioning}
+\mathbf{D}^{b_N}_{\omega} =  
+\mathbf{D}_{P}^{b_N} + \mathbf{D}_{H}^{b_N}\text{,}
+\end{equation}
+so that
+\begin{equation}\label{Particular-equation}
+\mathbf{D}^{b_N}_P \mathbf{S} \mathbf{D} + \mathbf{D} \mathbf{S} \mathbf{D}^{b_N}_P - \mathbf{D}^{b_N}_{P} = 
+\mathbf{K}^{(N-1)}_{\omega}
+\end{equation}
+and
+\begin{equation}\label{Homogeneous-equation}
+\mathbf{D}^{b_N}_H \mathbf{S} \mathbf{D} + \mathbf{D} \mathbf{S} \mathbf{D}^{b_N}_H - \mathbf{D}^{b_N}_{H} = 
+\mathbf{0} \text{.}
+\end{equation}
+It can be shown that
+\begin{equation}\label{Particular-final}
+\mathbf{D}^{b_N}_P = - \mathbf{K}^{(N-1)}_{\omega} + \mathbf{K}^{(N-1)}_{\omega} \mathbf{S} \mathbf{D} + \mathbf{D} \mathbf{S} \mathbf{K}^{(N-1)}_{\omega} \text{,}
+\end{equation}
+which means that $\mathbf{D}^{b_N}_P$ can be found using only $\mathbf{D}$ perturbed to lower orders than the one in question and $\mathbf{S}$. Next, defining $\bm{\mathcal{F}}^{b_{N}}_{\omega} \equiv \exp{i \omega_{b_{N}} t}\bm{\mathcal{F}}^{b_{N}}$ in analogy with the definition for $\mathbf{D}^{b_N}_{\omega}$, the separation
+\begin{equation}\label{fbomega}
+\bm{\mathcal{F}}^{b_{N}}_{\omega} = \mathbf{G}^{KS} \bigl( \mathbf{D}_{H}^{b_{N}} \bigr)  + 
+\breve{\bm{\mathcal{F}}}^{b_{N}}_{\omega}\text{,}
+\end{equation}
+can be made, where $\mathbf{G}^{KS} \bigl( \mathbf{D}_{H}^{b_{N}} \bigr)$, given by
+\begin{equation}\label{GKSbc}
+\mathbf{G}^{KS}(\mathbf{D}^{b_{N}}_{H}) = \mathbf{G}^{\gamma}(\mathbf{D}^{b_{N}}_{H}) + \mathbf{G}^{xc}(\mathbf{D}^{b_{N}}_{H})\text{,}
+\end{equation}
+containing a two-electron integral contribution $\mathbf{G}^{\gamma}(\mathbf{D}^{b_{N}}_{H})$ and an exchange--correlation contribution $\mathbf{G}^{xc}(\mathbf{D}^{b_{N}}_{H})$, contains all contributions to $\bm{\mathcal{F}}^{b_{N}}_{\omega} $ that depend on $\mathbf{D}^{b_{N}}_{H}$, while $\breve{\bm{\mathcal{F}}}^{b_{N}}_{\omega}$ contains terms that do not depend on $\mathbf{D}^{b_{N}}_{H}$, but will depend on \textit{e.g.} lower order perturbed density matrices and $\mathbf{D}^{b_N}_P$. \fixme{and the particular contribution to F, right?}
+
+The homogeneous contribution $\mathbf{D}_{H}^{b_N}$ can be determined from the ansatz \fixme{cite?}
+\begin{equation}\label{D-H-bn}
+\mathbf{D}_{H}^{b_N} = \mathbf{D} \mathbf{S} \mathbf{X}^{b_N} -  \mathbf{X}^{b_N} \mathbf{S} \mathbf{D} \text{,}
+\end{equation}
+where we introduced the so-called response parameters $\mathbf{X}^{b_N}$, obtainable as solutions to the \textit{response equation}
+\begin{equation}
+\label{LRE}
+(\mathbf{E}^{[2]} - \omega_{b_N} \mathbf{S}^{[2]}) \mathbf{X}^{b_N} = \mathbf{M}_{RHS}^{b_N}\text{,}
+\end{equation}
+where the action on $\mathbf{X}^{b_N}$ of the generalized Hessian and metric matrices $\mathbf{E}^{[2]}$ and $\mathbf{S}^{[2]}$, respectively, is defined as follows:
+\begin{eqnarray}\label{E2-X}
+\mathbf{E}^{[2]} \mathbf{X}^{b_{N}}  &=&
+\mathbf{G}^{KS}([\mathbf{X}^{b_{N}}, \mathbf{D}]_S) \mathbf{D} \mathbf{S} - 
+\mathbf{S} \mathbf{D} \mathbf{G}^{KS}([\mathbf{X}^b, \mathbf{D}]_S) +
+\mathbf{F} [\mathbf{X}^{b_{N}},\mathbf{D}]_S \mathbf{S} 
+- \mathbf{S} [\mathbf{X}^{b_{N}},\mathbf{D}]_S \mathbf{F} 
+\\ \label{S2-X}
+\mathbf{S}^{[2]} \mathbf{X}^{b_{N}} &=& 
+\mathbf{S} [\mathbf{X}^{b_{N}},\mathbf{D}]_S \mathbf{S} \text{.}
+\end{eqnarray}
+In Eqs.~\eqref{E2-X} and \eqref{S2-X} S commutator $[\mathbf{A}, \mathbf{B}]_S$ is defined as
+\begin{equation}
+[\mathbf{A}, \mathbf{B}]_S \equiv \mathbf{ASB} - \mathbf{BSA}\text{.}
+\end{equation}
+Also introduced in Eq.~\eqref{LRE} was the right-hand side $\mathbf{M}_{RHS}^{b_N}$, given as
+\begin{eqnarray}\label{MRHS}
+\mathbf{M}_{RHS}^{b_N} = \bigr[\bigl(\tilde{\bm{\mathcal{F}}} - {\textstyle \frac{i}{2}} \tilde{\mathbf{S}} 
+\!{\textstyle \frac{d}{dt}} \bigr) \tilde{\mathbf{D}} \tilde{\mathbf{S}} \bigr]^{\negmedspace \circleddash, b_N}_{ P } = \bigr[ \tilde{\mathbf{Y}} \bigr]^{\negmedspace \circleddash, b_N}_{ P } \text{,}
+\end{eqnarray}
+where the subscripted $P$ denotes that for terms involving $\mathbf{D}^{b_N}_{\omega}$, only the particular part $\mathbf{D}^{b_N}_{P}$ is used. Altogether, the above derivations imply that the perturbed matrices $\mathbf{D}^{b_N}_{\omega}$ and $\bm{\mathcal{F}}^{b_{N}}_{\omega}$ may be found in an order-by-order manner as follows, assuming that their lower-order counterparts, perturbed with respect to subsets of $b_{N}$, are available --- which they in general can be said to be as an inductive assumption \fixme{change formulation?}: First, construct $\mathbf{D}^{b_N}_{P}$ from Eq.~\eqref{Particular-final} using only lower-order contributions. Next, determine $\breve{\bm{\mathcal{F}}}^{b_{N}}_{\omega}$ involving lower-order contributions and $\mathbf{D}^{b_N}_{P}$. The right-hand side $\mathbf{M}_{RHS}^{b_N}$ can now be constructed from Eq.~\eqref{MRHS} \fixme{comment about how this may now be done since we have Dp (and Fp)?} and Eq.~\eqref{LRE} can then be solved for $\mathbf{X}^{b_N}$, which allows the determination of $\mathbf{D}_{H}^{b_N}$ from Eq.~\eqref{D-H-bn}, which finally allows the full $\mathbf{D}^{b_N}_{\omega}$ to be found from Eq.~\eqref{D-partitioning} and the full $\bm{\mathcal{F}}^{b_{N}}_{\omega}$ to be found from Eq.~\eqref{fbomega} since $\mathbf{G}^{KS} \bigl( \mathbf{D}_{H}^{b_{N}} \bigr)$ can now be evaluated. By starting at the first order of perturbation and progressing order-by-order, the necessary lower-order contributions will always be available when they are needed.\fixme{formulation?}
+
+\fixme{Say something here about the cost - rsp eqns. are assumed to be the most costly and the impact of the (k,n) rule can therefore be substantial}
+
+
+
+
+
+
+
+
+\subsection{Implementation}
+\label{routines}
+
+The theory presented in the previous section lends itself well to computer program implementation, and by the use of a recursive formalism, the open-endedness of the theory can be realized. A code written in this way can in principle be used to calculate any response property as long as external contributions can be provided, such as perturbed one- and two-electron intregrals, exchange--correlation contributions, and response vectors found from solution of response equations. In addition, if the interfaces to routines providing such external contributions and routines performing standard matrix operations are defined in a generic manner, the code can also be made modular and connections to such external functionality could thus be made without making changes inside the code itself. We summarize in this section how these features may be implemented, and we will furthermore demonstrate how such a code can be set up to reuse common intermediate results and minimize the number of calls to external routines by grouping contributions together.
+
+% Something about the two major stages of the calculation: Perturbed F, D, S and assembling the property
+From the various definitions of the terms that appear on the right-hand side of Eq.~\eqref{master}, it can be seen that these terms contain perturbed and unperturbed Fock, density and overlap matrices in addition to perturbed one- and two-electron integral matrices, and, additionally, exchange--correlation contributions in the cases where calculation at the DFT level is sought. As can also be seen, apart from the perturbed $\mathbf{S}$ entering as the first factor of the terms contained in $(\mathbf{SW})_{n_{W}}^{abc\cdots}$, the maximum necessary order of perturbation to consider for the matrices $\mathbf{F}$, $\mathbf{D}$, and $\mathbf{S}$ is dictated by the choice of calculation rule $(k, n)$. As these matrices --- either perturbed or unperturbed --- are used in several places in Eq.~\eqref{master}, a reasonable approach is to calculate and store them before Eq.~\eqref{master} is evaluated and then to apply them as needed for this purpose. Such storage can be straightforwardly implemented by the use of linked lists where each list element contains a header section describing a particular perturbation tuple $b_{N}$ and a data section containing e.g. the matrices $\mathbf{F}^{b_{N}}$ perturbed with respect to the components of that perturbation tuple (and likewise for the matrices $\mathbf{D}$ and $\mathbf{S}$). Moreover, if it is known that several response properties are to be calculated, it is possible to make use of the fact that the resulting terms on the right-hand side of Eq.~\eqref{master} may contain one or more perturbed $\mathbf{F}$, $\mathbf{D}$, and $\mathbf{S}$ that are common between more than one of the properties. It can therefore be useful to have the linked lists be constructed by identifying all necessary perturbed $\mathbf{F}$, $\mathbf{D}$, and $\mathbf{S}$ for all properties for which calculation is desired, making new entries only when a particular perturbation tuple was not encountered before. The resulting list would therefore contain all desired perturbed matrices for all properties while at the same time avoiding recalculation of common results.
+
+A procedure to identify the needed perturbed $\mathbf{F}$, $\mathbf{D}$, and $\mathbf{S}$ for a given choice of $(k, n)$ is described in Algorithm \ref{ID-FDS} \fixme{MaR: Update the algorithm to encompass all of this and to use the ``recurse --- then calculate'' approach and any new functionality since the below version - such as identifying over several properties/freq. configs.}
+
+\begin{algorithm}
+\caption{Identify perturbed F, D, S ($b_{N}$)}
+\label{ID-FDS}
+\begin{algorithmic}
+   \State {\it perturbation tuple}: $b_{N}$, $b_{N}^{*}$\\
+
+   \If{$N > 1$}
+      \For{$i$ in 1, $N$}
+          \If{not already calculated} % VERIFY THIS SIMPLIFICATION
+            \State $b_{N}^{*} \gets b_{N}$
+            \State Remove $b_{N, i}^{*}$  from $b_{N}^{*}$
+            \State call self($b_{N}^{*}$)
+          \EndIf
+      \EndFor
+   % The else: was removed (VERIFY)
+   \EndIf
+   \If{not already calculated}
+      \If{not truncating because of $(k,n)$ rule}
+        \State call calculate perturbed F, D, S ($b_{N}$)
+      \EndIf
+   \EndIf
+\end{algorithmic}
+\end{algorithm}
+
+In the traversal stage of Algorithm \ref{ID-FDS}, we note that the grouping of the perturbed matrices is done in an order-by-order fashion since the calculation of the perturbed $\mathbf{F}^{b_{N}}$ and $\mathbf{D}^{b_{N}}$ for some perturbation tuple $b_{N}$ depends on the corresponding perturbed $\mathbf{F}$ and $\mathbf{D}$ for all subsets of $b_{N}$. By proceeding order by order, one can then assure that all required lower-order terms will be available when needed. Applying the theory presented in Section~\ref{rsp_theory}, and assuming that all such lower-order contributions have already been obtained, Algorithm \ref{CALC-FDS} can be used to calculate a given $\mathbf{F}^{b_{N}}$ and $\mathbf{D}^{b_{N}}$ (and $\mathbf{S}^{b_{N}}$).
+
+\fixme{MaR: Update the algorithm to encompass all of this and to use the ``recurse --- then calculate'' approach and any new functionality since the below version}
+
+\begin{algorithm}
+\caption{Calculate perturbed F, D, S ($b_{N}$)}
+\label{CALC-FDS}
+\begin{algorithmic}
+\State {\it perturbation tuple}: $b_{N}$, $b_{N}^{*}$\\
+
+\State Get $\bm{\mathcal{S}}^{b_N}$
+\State Construct $\breve{\bm{\mathcal{F}}}^{b_N}$ except terms involving $\mathbf{D}_{P}^{b_N}$ (VERIFY)
+\For{component $i$ of $b_{N}$}
+\State  $\mathbf{D}_{P, i}^{b_N} \gets \mathbf{Z}^{b_N}$ taking $\mathbf{D}_{i}^{b_N} = \mathbf{0}$ in the evaluation of $\mathbf{Z}^{b_N}$
+\State  $\mathbf{D}_{P, i}^{b_N} \gets \mathbf{D}_{P, i}^{b_N} - \mathbf{D} \mathbf{S} \mathbf{D}_{P, i}^{b_N} - \mathbf{D}_{P, i}^{b_N} \mathbf{S} \mathbf{D}$ (VERIFY SIGNS)
+ \State $\breve{\bm{\mathcal{F}}}_{i}^{b_N} \gets \breve{\bm{\mathcal{F}}}_{i}^{b_N} + \mathbf{G}^{KS}(\mathbf{D}^{b_N}_{P, i})$ (VERIFY RHS) 
+\State  Calculate $\mathbf{M}_{RHS}^{b_N}$ from eqn. \eqref{MRHS}
+\State  Solve eqn. \eqref{LRE} (VERIFY) for $\mathbf{X}^{b_N}$ (-2 FACTOR?)
+\State  $\mathbf{D}_{H, i}^{b_N} \gets \mathbf{X}^{b_N} \mathbf{S} \mathbf{D} - \mathbf{D} \mathbf{S} \mathbf{X}^{b_N}$
+\State  $\breve{\bm{\mathcal{F}}}_{i}^{b_N} \gets \breve{\bm{\mathcal{F}}}_{i}^{b_N} + \mathbf{G}^{KS}(\mathbf{D}^{b_N}_{H, i})$ (VERIFY RHS)
+\State  $\mathbf{D}_{i}^{b_N} \gets \mathbf{D}_{P, i}^{b_N} + \mathbf{D}_{H, i}^{b_N}$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+The identification of contributions to $\breve{\bm{\mathcal{F}}}^{b_N}$ in Algorithm \ref{CALC-FDS} may be accomplished by the use of the recursive Algorithm \ref{ID-CALC-FOCK}. The overall structure of this algorithm may also be applied for the identification of contributing terms and subsequent evaluation of $\mathcal{E}_{k,n}^{abc\cdots}$ of Eq.~\eqref{master}.
+
+\fixme{MaR: Update the algorithm to encompass all of this and to use the ``recurse --- then calculate'' approach and any new functionality since the below version}
+
+\begin{algorithm}
+\caption{Identify energy/Fock matrix contributions ($b_{N}$, $b_{\text{diff}}$)}
+\label{ID-CALC-FOCK}
+\begin{algorithmic}
+\State {\it perturbation tuple}: $b_{N}$, $b_{N}^{*}$
+\State {\it perturbation tuple, array(rank $=$ 1)}: $b_{\text{diff}}$, $b_{\text{diff}}^{*}$\\
+
+   \If{$N > 0$}
+      \For{$i$ in 1, length($b_{\text{diff}}$) + 1}
+         \State $b_{\text{diff}}^{*} \gets b_{\text{diff}}$
+         \If{$i =$ length($b_{\text{diff}}$)$ + 1$}
+            \State Extend $b_{\text{diff}}^{*}$ by one tuple
+            \State $b_{\text{diff}, i}^{*} \gets b_{N}$
+         \Else
+            \State Add $b_{N, 1}$ to $b_{\text{diff}, i}^{*}$
+         \EndIf
+
+         \State $b_{N}^{*} \gets b_{N}$
+         \State Remove $b_{N, 1}^{*}$  from $b_{N}^{*}$
+         \State Call self($b_{N}^{*}$, $b_{\text{diff}}^{*}$)
+      \EndFor
+   \Else
+
+      \If{not already calculated}
+         \If{not truncating because of $(k,n)$ rule}
+            \If{considering lower-order Fock contributions}
+               \If{$b_{\text{diff}, 2} \neq b_{N}$ of the initial (very first) call}
+                  \State Calculate Fock contribution for $b_{\text{diff}}$
+               \EndIf
+            \ElsIf{considering energy-type contributions}
+               \State Calculate energy-type contribution for $b_{\text{diff}}$
+            \EndIf
+         \EndIf
+      \EndIf
+   \EndIf
+\end{algorithmic}
+\end{algorithm}
+
+A similar recursive product-rule algorithm can be constructed for the identification of terms resulting from the differentiation of the four last terms on the right-hand side of Eq.~\eqref{master} and is shown in Algorithm~\ref{GET-DS}. These terms contain the matrices $\mathbf{W}$, $\mathbf{\lambda}$, $\mathbf{Y}$, $\mathbf{\zeta}$, and $\mathbf{Z}$ (in addition to the matrix $\mathbf{S}$ to be contracted with $\mathbf{W}$), which are in turn mainly composed of products of three perturbed or unperturbed $\mathbf{F}$, $\mathbf{D}$ or $\mathbf{S}$ matrices, as may be seen from their definition, and Algorithm~\ref{GET-DS} may be used to identify these three-matrix products in routines for the construction of the perturbed $\mathbf{W}$, $\mathbf{\lambda}$, $\mathbf{Y}$, $\mathbf{\zeta}$, and $\mathbf{Z}$, and may also be used to identify the various bra- and ket-side differentiation combinations for perturbed matrices $\mathbf{T}$.
+
+\fixme{MaR: Update the algorithm to encompass all of this and to use the ``recurse --- then calculate'' approach and any new functionality since the below version}
+
+\begin{algorithm}
+\caption{Get derivative superstructure (multiplicity $n$) ($b_{N}$, $b_{\text{diff}}$, $b_{\text{list}}$)}
+\label{GET-DS}
+\begin{algorithmic}
+\State {\it perturbation tuple}: $b_{N}$, $b_{N}^{*}$
+\State {\it perturbation tuple, dimension($n$)}: $b_{\text{diff}}$, $b_{\text{diff}}^{*}$
+\State {\it perturbation tuple, dimension($n$), list}: $b_{\text{list}}$\\
+
+   \If{$N > 0$}
+      \For{i in 1, $N$}
+         \State $b_{\text{diff}}^{*} \gets b_{\text{diff}}$
+         \State Add $b_{N, 1}$ to $b_{\text{diff}, i}^{*}$
+         \State $b_{N}^{*} \gets b_{N}$
+         \State Remove $b_{N, 1}^{*}$ from $b_{N}^{*}$ 
+         \State Call self($b_{N}^{*}$, $b_{\text{diff}}^{*}$, $b_{\text{list}}$) % MAYBE EVEN KN CHECK BEFORE RECURSING?
+      \EndFor
+   \Else
+      \If{not truncating because of $(k,n)$ rule}
+         \If{not truncating because of prime}
+            \State Add $b_{\text{diff}}$ to $b_{\text{list}}$
+         \EndIf
+      \EndIf
+   \EndIf
+\end{algorithmic}
+\end{algorithm}
+
+Having shown how the various contributions in response property calculations may be identified, we now turn to the actual evaluation of these contributions. 
+
+% Show use and utility of callback functionality, matrix operation mediation
+% Show grouping together of terms
 \section{\label{sec:VPT}Energy derivatives from variational perturbation theory}
 
 \subsection{\label{sec:PDBS}Perturbation-dependent basis sets}
