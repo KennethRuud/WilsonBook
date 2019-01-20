@@ -181,7 +181,8 @@ where we have introduced the generalized Kohn-Sham energy $\tilde{\mathcal{E}}$ 
  \bigl( \tilde{\mathbf{h}} + \tilde{\mathbf{V}}^t +
 {\textstyle \frac{1}{2}}
 \tilde{\mathbf{G}}^{\gamma}(\tilde{\mathbf{D}}) 
- - {\textstyle \frac{i}{2}} \tilde{\mathbf{T}} \bigr) \tilde{\mathbf{D}} + \tilde{E}_{xc}[\tilde{\rho}(\tilde{\mathbf{D}})]
+ - {\textstyle \frac{i}{2}} \tilde{\mathbf{T}} \bigr) \tilde{\mathbf{D}} \\ 
+\nonumber && + \tilde{E}_{xc}[\tilde{\rho}(\tilde{\mathbf{D}})]
 + \tilde{h}_{nuc}\text{,}
 \end{eqnarray}
 and where the integer in the superscript notation of $\tilde{\mathcal{E}}^{m, abc}$ denotes chain rule differentiation with respect to the density matrix $\tilde{\mathbf{D}}$, so that, in general, taking $n$ to be the total number of perturbations in the collection $a, b, c, \ldots$, 
@@ -234,7 +235,8 @@ linear and quadratic response functions $L^{ab}$ and $L^{abc}$ can be written do
 \begin{eqnarray}
 L^{ab} & \stackrel{\,^{\{\mathrm{Tr}\}_T}}{=} &  \mathcal{E}^{0,ab}+\bm{\mathcal{E}}^{1,a}\mathbf{D}^{b}-\mathbf{S}^{ab}\mathbf{W}-\mathbf{S}^{a}\mathbf{W}^{b}\label{QagraD}\\
 L^{abc} & \stackrel{\,^{\{\mathrm{Tr}\}_T}}{=} &  \mathcal{E}^{0,abc}+\bm{\mathcal{E}}^{1,ac}\mathbf{D}^{b}+\bm{\mathcal{E}}^{1,ab}\mathbf{D}^{c}+\bm{\mathcal{E}}^{2,a}\!(\mathbf{D}^{b})\mathbf{D}^{c}\nonumber \\
- &+&  \bm{\mathcal{E}}^{1,a}\mathbf{D}^{bc}-\mathbf{S}^{abc}\mathbf{W}-\mathbf{S}^{ab}\mathbf{W}^{c}-\mathbf{S}^{ac}\mathbf{W}^{b}-\mathbf{S}^{a}\mathbf{W}^{bc}\label{QabgraD} \text{,}
+ &&+  \bm{\mathcal{E}}^{1,a}\mathbf{D}^{bc}-\mathbf{S}^{abc}\mathbf{W}-\mathbf{S}^{ab}\mathbf{W}^{c} \\ 
+&&- \mathbf{S}^{ac}\mathbf{W}^{b}-\mathbf{S}^{a}\mathbf{W}^{bc}\label{QabgraD} \text{,}
 \end{eqnarray}
 where higher-order responses may be derived by straightforward further manipulation. Response functions derived in this form follow the so-called $(n + 1)$ rule \fixme{cite}, where, in order to evaluate the expression for a property of order $(n + 1)$, it is necessary to provide quantities such as the density matrix perturbed to order $n$ \fixme{or ``perturbative corrections to e.g. the density matrix''?}. However, it is also possible to increase the flexibility of the formalism to encompass regimes with other requirements concerning which perturbed quantities must be provided in order to evaluate the expression for the property, \textit{i.e.} allowing for other so-called calculation rules. This may be achieved by the introduction of Lagrange multipliers for both the density matrix idempotency condition given as
 \begin{eqnarray}\label{idempotency}
@@ -259,18 +261,21 @@ where $\tilde{\bm{\lambda}}_{a}$ is the multiplier for $\tilde{\mathbf{Y}}$, fro
 \end{equation}
 With these definitions, it can be shown \fixme{cite} that an arbitrary response property $\langle \langle A ; B, C, \ldots \rangle \rangle_{\omega_{bc\cdots}}$, where $\omega_{bc\cdots}$ denotes the frequencies associated with perturbations $b, c, \ldots$, may be expressed as
 \begin{equation}\label{master}
-\langle \langle A ; B, C, \ldots \rangle \rangle_{\omega_{bc\cdots}} = \mathcal{L}_{k,n}^{abc\cdots} \stackrel{\,^{\{\mathrm{Tr}\}_T}}{=} \mathcal{E}_{k,n}^{abc\cdots} - (\mathbf{SW})_{n_{W}}^{abc\cdots} - (\mathbf{S}^{a}\mathbf{W})_{k_{S},n'_{W}}^{bc\cdots} - (\mathbf{\lambda}_{a}\mathbf{Y})_{k_{\lambda},n'_{Y}}^{bc\cdots} - (\mathbf{\zeta}_{a}\mathbf{Z})_{k_{\zeta},n'_{Z}}^{bc\cdots}\text{,}
+\begin{split}
+& \langle \langle A ; B, C, \ldots \rangle \rangle_{\omega_{bc\cdots}} = \mathcal{L}_{k,n}^{abc\cdots} \stackrel{\,^{\{\mathrm{Tr}\}_T}}{=} 
+ \mathcal{E}_{k,n}^{abc\cdots} - (\mathbf{SW})_{n_{W}}^{abc\cdots} \\ & - (\mathbf{S}^{a}\mathbf{W})_{k_{S},n'_{W}}^{bc\cdots} - (\mathbf{\lambda}_{a}\mathbf{Y})_{k_{\lambda},n'_{Y}}^{bc\cdots} - (\mathbf{\zeta}_{a}\mathbf{Z})_{k_{\zeta},n'_{Z}}^{bc\cdots}\text{,}
+\end{split}
 \end{equation}
 where the integers $k$ and $n$, in the various forms in which they appear in the subscripts of the terms in Eq.~\eqref{master}, denote a particular choice of calculation rule: Eq.~\eqref{master} contains various terms that are \textit{perturbed} or differentiated with respect to perturbation strengths. Straightforward such differentiation would yield terms which may contain the matrices $\mathbf{F}$, $\mathbf{D}$, $\mathbf{S}$, or quantities composed of these matrices, perturbed to orders up to the full number of operators defining the property. However, the calculation rule allows for truncation of the terms thus obtained, so that terms which contain these matrices or quantities perturbed to certain higher orders may be disregarded. The result is that some perturbed matrices or quantitites need not be calculated in order to be able to evaluate the desired response property. Since such calculation is typically a costly part of the calculation, different choices of calculation rule, resulting in different truncation regimes, may have a substantial impact on the total computation time needed.
 
 The way in which such truncation may be carried out is determined by the choice of values of $k$ and $n$, whose meaning will be explained below and whose choice is made in the following manner: Let $N$ denote the total order of perturbation-strength differentiation for the property in question, i.e. the total order of operators inside the response brackets $\langle \langle A ; B, C, \ldots \rangle \rangle_{\omega_{bc\cdots}}$. 
 The value of $k$ may be chosen freely as an integer in the interval $\left[ 0, \frac{N - 1}{2} \right]$, where $\frac{N - 1}{2}$ is rounded down for even $N$ \fixme{MaR: Actually, I think the AJT article allows $N/2$  and round down for odd $N$ but we have restricted this in OpenRSP - I think this was done because I thought there wasn't much practical difference between the additional rule choice and the next, but there is in fact a difference at least if not all of the perturbations are equal}. The relation $k + n = N - 1$ is true for all values of $N$ and can be used to determine the corresponding value of $n$ for a particular choice of $k$, so that the calculation rule choice is fully determined by the choice of $k$. The choice $k = 0$ corresponds to using the previously mentioned $(n + 1)$ rule, while choosing the maximum allowable value of $k$ corresponds to using the so-called $(2n + 1)$ rule \fixme{cite}, while other choices of $k$, if possible at the order of perturbation considered, are intermediate between these extremes.
 
-The meaning of $k$ and $n$ is as follows: Let $abcd\cdots$ denote the set or \textit{tuple} of operators that define the response property in question. The value of $k$, depending on particular way in which it is applied to a given term in Eq.~\eqref{master}, denotes the maximum order of perturbation that must be considered for $\mathbf{F}$, $\mathbf{D}$, $\mathbf{S}$, or quantities composed of these matrices, when the collection of perturbations considered in this manner --- a subset of $abcd\cdots$ --- includes the perturbation chosen to be perturbation $a$, so that terms that contain such matrices or quantities perturbed to higher orders (if $a$ is among those perturbations) may be disregarded. The value of $n$ denotes the corresponding maximum necessary order of perturbation when the collection of perturbations considered does not include perturbation $a$.
+The meaning of $k$ and $n$ is as follows: Let $abcd\cdots$ denote the set or \textit{tuple} of operators that define the response property in question. The value of $k$, depending on the particular way in which it is applied to a given term in Eq.~\eqref{master}, denotes the maximum order of perturbation that must be considered for $\mathbf{F}$, $\mathbf{D}$, $\mathbf{S}$, or quantities composed of these matrices, when the collection of perturbations considered in this manner --- a subset of $abcd\cdots$ --- includes the perturbation chosen to be perturbation $a$, so that terms that contain such matrices or quantities perturbed to higher orders (if $a$ is among those perturbations) may be disregarded. The value of $n$ denotes the corresponding maximum necessary order of perturbation when the collection of perturbations considered does not include perturbation $a$.
 
 Applied to the terms on the right-hand side of Eq.~\eqref{master}, for the \textit{energy contribution} $\mathcal{E}_{k,n}^{abc\cdots}$, the $(k,n)$ subscript pertains to perturbed $\mathbf{D}$ matrices and terms with perturbed $\mathbf{D}$ matrices that do not fulfill the $(k,n)$ condition are thus disregarded. An example of this can be found in Eq.~\eqref{QabgraD}, where the first five terms on the right-hand side together constitute the term $\mathcal{E}_{0,2}^{abc}$. For the \textit{Pulay ``n'' contribution} \fixme{cite? and should it instead be the ``Pulay n contribution`` as I have sometimes called it to distinguish it from the Pulay Lagrangian-style term?} $(\mathbf{SW})_{n_{W}}^{abc\cdots}$, the truncation dictated by $n$ is applied to $\mathbf{W}$. For the \textit{Pulay ``Lagrange'' contribution} $(\mathbf{S}^{a}\mathbf{W})_{k_{S},n'_{W}}^{bc\cdots}$, the \textit{TDSCF Lagrange contribution} $(\mathbf{\lambda}_{a}\mathbf{Y})_{k_{\lambda},n'_{Y}}^{bc\cdots}$ and the \textit{idempotency Lagrange contribution} $(\mathbf{\zeta}_{a}\mathbf{Z})_{k_{\zeta},n'_{Z}}^{bc\cdots}$, the truncation induced by $k$ is applied to the first matrix in each of these terms, while the $n$ truncation is applied to the second matrix, where, additionally, the use of a prime superscript on e.g. the subscript $n'_{W}$ denotes that the $n$ condition applies to the constituent matrices $\mathbf{F}$, $\mathbf{D}$ and $\mathbf{S}$ of $\mathbf{W}$ and not just to $\mathbf{W}$ itself.
 
-The calculation of perturbed $\mathbf{F}$ and $\mathbf{D}$ matrices may be carried out in an order-by-order fashion. Letting $b_{N}$ and $\omega_{b_{N}}$ denote, respectively a collection of $N$ perturbations and the sum of their associated frequencies, and defining $\mathbf{D}^{b_N}_{\omega} \equiv \exp{i \omega_{b_{N}} t}\mathbf{D}^{b_N}$, the differentiation of Eq.~\eqref{idempotency} may be written on the general form
+The calculation of perturbed $\mathbf{F}$ and $\mathbf{D}$ matrices may be carried out in an order-by-order fashion. Letting $b_{N}$ and $\omega_{b_{N}}$ denote, respectively a collection of $N$ perturbations and the sum of their associated frequencies, and defining $\mathbf{D}^{b_N}_{\omega} \equiv \exp{\left( i \omega_{b_{N}} t \right)}\mathbf{D}^{b_N}$, the differentiation of Eq.~\eqref{idempotency} may be written on the general form
 \begin{equation}\label{Dbn-idem}
 \mathbf{D}^{b_N}_{\omega} \mathbf{S} \mathbf{D} + \mathbf{D} \mathbf{S} \mathbf{D}^{b_N}_{\omega} - \mathbf{D}^{b_N}_{\omega} = 
 \mathbf{K}^{(N-1)}_{\omega} \text{,}
@@ -279,7 +284,7 @@ where
 \begin{equation}\label{Knminus1}
 \mathbf{K}^{(N-1)}_{\omega} = - (\mathbf{DSD})^{b_N}_{\omega,(N-1)}\text{,}
 \end{equation}
-where the subscript $(N - 1)$ signifies that only terms containing density matrices perturbed up to order $(N - 1)$ are kept. By the use of projection matrices \fixme{maybe more detail?}, the perturbed density matrix $\mathbf{D}^{b_N}_{\omega}$ may, with respect to its role as a solution of Eq.~\eqref{Dbn-idem}, be separated into a particular and homogeneous part $\mathbf{D}_{P}^{b_N}$ and $\mathbf{D}_{H}^{b_N}$, respectively, as
+where the subscript $(N - 1)$ signifies that only terms containing density matrices \fixme{and S?} perturbed up to order $(N - 1)$ are kept. By the use of projection matrices \fixme{maybe more detail?}, the perturbed density matrix $\mathbf{D}^{b_N}_{\omega}$ may, with respect to its role as a solution of Eq.~\eqref{Dbn-idem}, be separated into a particular and homogeneous part $\mathbf{D}_{P}^{b_N}$ and $\mathbf{D}_{H}^{b_N}$, respectively, as
 \begin{equation}\label{D-partitioning}
 \mathbf{D}^{b_N}_{\omega} =  
 \mathbf{D}_{P}^{b_N} + \mathbf{D}_{H}^{b_N}\text{,}
@@ -298,7 +303,7 @@ It can be shown that
 \begin{equation}\label{Particular-final}
 \mathbf{D}^{b_N}_P = - \mathbf{K}^{(N-1)}_{\omega} + \mathbf{K}^{(N-1)}_{\omega} \mathbf{S} \mathbf{D} + \mathbf{D} \mathbf{S} \mathbf{K}^{(N-1)}_{\omega} \text{,}
 \end{equation}
-which means that $\mathbf{D}^{b_N}_P$ can be found using only $\mathbf{D}$ perturbed to lower orders than the one in question and $\mathbf{S}$. Next, defining $\bm{\mathcal{F}}^{b_{N}}_{\omega} \equiv \exp{i \omega_{b_{N}} t}\bm{\mathcal{F}}^{b_{N}}$ in analogy with the definition for $\mathbf{D}^{b_N}_{\omega}$, the separation
+which means that $\mathbf{D}^{b_N}_P$ can be found using only $\mathbf{D}$ perturbed to lower orders than the one in question and $\mathbf{S}$. Next, defining $\bm{\mathcal{F}}^{b_{N}}_{\omega} \equiv \exp{\left(i \omega_{b_{N}} t\right)}\bm{\mathcal{F}}^{b_{N}}$ in analogy with the definition for $\mathbf{D}^{b_N}_{\omega}$, the separation
 \begin{equation}\label{fbomega}
 \bm{\mathcal{F}}^{b_{N}}_{\omega} = \mathbf{G}^{KS} \bigl( \mathbf{D}_{H}^{b_{N}} \bigr)  + 
 \breve{\bm{\mathcal{F}}}^{b_{N}}_{\omega}\text{,}
@@ -321,8 +326,9 @@ where we introduced the so-called response parameters $\mathbf{X}^{b_N}$, obtain
 where the action on $\mathbf{X}^{b_N}$ of the generalized Hessian and metric matrices $\mathbf{E}^{[2]}$ and $\mathbf{S}^{[2]}$, respectively, is defined as follows:
 \begin{eqnarray}\label{E2-X}
 \mathbf{E}^{[2]} \mathbf{X}^{b_{N}}  &=&
-\mathbf{G}^{KS}([\mathbf{X}^{b_{N}}, \mathbf{D}]_S) \mathbf{D} \mathbf{S} - 
-\mathbf{S} \mathbf{D} \mathbf{G}^{KS}([\mathbf{X}^b, \mathbf{D}]_S) +
+\mathbf{G}^{KS}([\mathbf{X}^{b_{N}}, \mathbf{D}]_S) \mathbf{D} \mathbf{S} 
+\\ \nonumber && - \mathbf{S} \mathbf{D} \mathbf{G}^{KS}([\mathbf{X}^b, \mathbf{D}]_S) 
+\\ \nonumber && +
 \mathbf{F} [\mathbf{X}^{b_{N}},\mathbf{D}]_S \mathbf{S} 
 - \mathbf{S} [\mathbf{X}^{b_{N}},\mathbf{D}]_S \mathbf{F} 
 \\ \label{S2-X}
