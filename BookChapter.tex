@@ -155,7 +155,308 @@ covered at length in the main body of the article.
 \section{\label{sec:intro}Introduction}
 
 
+
 \section{\label{sec:MolProp}Molecular Properties as energy derivatives}
+
+\subsection{Variational perturbation theory}
+
+The calculation of molecular properties using the flexible tools of
+response theory~\cite{} is often hampered by the lengthy equations that
+follows from the formalism when expanding the energy in orders of the
+applied perturbation. This is also the case when we consider
+derivatives of the quasi-energy~\cite{}, as we will see in
+Section~\ref{rsp_theory}. Nevertheless, the underlying principles are
+rather simple, the complications often arising from the explicit
+parametrization of the wave function theory used. Variational
+perturbation theory provides a simple framework to illustrate these
+principles, and will also provide us with a nice framework to link
+energy-derivative theory  to perturbation theory. 
+
+Let us consider an electronic energy $E\equiv
+E\left(\lambda,\varepsilon\right)$ that depends on a set of variational
+parameters $\lambda$ describing the wave function used to study the
+molecular system as well as some perturbations collected in a vector
+$\varepsilon$. The variational parameters will in the case of
+Hartree--Fock and Kohn--Sham density-functional theory (KS-DFT) be the
+molecular orbital coefficients. In the case of
+multiconfigurational self-consistent field wave functions (MCSCF), the
+variational parameters will include the weights of the different
+excited Slater determinants defined by the chosen active orbitals, in
+addition to the MO coefficients. The fact that the wave function will
+change when a perturbation $\varepsilon$ is applied, such as an external
+electric field $F$, implies that the variation parameters have an
+implicit dependence on the applied perturbations, $\lambda\equiv
+\lambda\left(\varepsilon\right)$. This means that when we apply a
+perturbation, the change in the energy will have two contributions,
+one from the explicity dependence of the Hamiltonian on the
+perturbation, and one from the implicit dependence of the variational
+parameters on the perturbation
+
+\begin{equation}
+\frac{dE}{d\varepsilon_a} = \frac{\partial E}{\partial\varepsilon_a} + \sum_i
+\frac{\partial
+  E}{\partial\lambda_i}\frac{\partial\lambda_i}{\partial\varepsilon_a}.
+\label{eq:variation}
+\end{equation}
+
+The choice of HF, KS-DFT or MCSCF above as examples was deliberate, as these
+methods are all methods that are considered to be {\em variational\/}
+methods, that is, the energy is stationary with respect to all
+variational parameters and that this can be enforced for any strength
+of an applied perturbation
+
+\begin{equation}
+\frac{dE}{d\lambda_i} = \frac{\partial E}{\partial\lambda_i} =
+0\qquad\forall i, \varepsilon
+\label{eq:varcondition}
+\end{equation}
+where the equivalence of the absolute and partial derivatives arise
+because $\lambda$ and $\varepsilon$ are independent variables. Inserting
+Eq.~\eqref{eq:varcondition} into Eq.~\eqref{eq:variation}, we get
+
+\begin{equation}
+\frac{dE}{d\varepsilon_a} = \frac{\partial E}{\partial\varepsilon_a},
+\end{equation}
+that is, the first-order variation in the energy is determined by the
+dependence of the Hamiltonian on the perturbation since
+$E=\langle\Psi\mid\hat{H}\mid\Psi\rangle$, and thus is given as the
+  expectation value
+
+\begin{equation}
+\frac{dE}{d\varepsilon_a} = \langle\Psi\mid\frac{\partial
+  \hat{H}}{\partial \varepsilon_a}\mid\Psi\rangle
+\end{equation}
+which is the well-known Hellmann-Feynman theorem. We emphasize that
+{\em variational\/} should not be confused with wave functions
+determined from the application of the variational
+principle. Configuration Interaction (CI) wave functions are for
+instance determined by applying the variational principle, but as it
+is only applied to the CI coefficients, and not the MO coefficients,
+the CI wave functions does not satisfy Eq.~\eqref{eq:varcondition}. For
+such {\em non-variational} wave functions, the Hellmann-Feynmann
+theorem will not give the same result as the energy variation given in
+Eq.~\eqref{eq:variation}. We note in passing that through the use of
+Langrange multipliers, non-variational wave functions can be cast in a
+variational form.~\cite{HelgakerJorgensen,PRSBook}
+
+Before considering second-order variations in the energy to external
+perturbations, let us first consider how the variational condition
+Eq.~\eqref{eq:varcondition} depends on an external
+perturbation. Differentiating Eq.~\eqref{eq:varcondition} with respect
+to a perturbation $\varepsilon_a$, we get
+
+\begin{equation}
+\frac{d^2E}{d\lambda_id\varepsilon_a} = 
+\frac{\partial^2E}{\partial\lambda_i\partial\varepsilon_a} +
+\sum_j\frac{\partial^2E}{\partial\lambda_i\partial\lambda_j}\frac{\partial\lambda_j}{\partial\varepsilon_a}
+= 0.\label{eq:1ordervar}
+\end{equation}
+where the last equality comes from differentiating the right-hand side
+of Eq.~\eqref{eq:varcondition}. We can rewrite Eq.~\eqref{eq:1ordervar} to
+give us an expression for the first-order variation of the variational
+parameters with respect to the external perturbation 
+
+\begin{equation}
+\frac{\partial\lambda_j}{\partial\varepsilon_a} =
+-\sum_i\left(\frac{\partial^2E}{\partial\lambda_i\partial\lambda_j}\right)^{-1}\frac{\partial^2E}{\partial\lambda_i\partial\varepsilon_a}.
+\end{equation}
+Let us now proceed to second-order variations in the
+energy. Differentiating Eq.~\eqref{eq:variation} with respect to a
+second perturbation, we get
+
+\begin{align}
+  \frac{d^2E}{d\varepsilon_a d\varepsilon_b} &= \frac{\partial^2
+    E}{\partial\varepsilon_a\partial\varepsilon_b} +
+  \sum_i\frac{\partial^2E}{\partial\varepsilon_a\partial\lambda_i}\frac{\partial\lambda_i}{\partial\varepsilon_b}
+  +
+  \sum_i\frac{\partial^2E}{\partial\varepsilon_b\partial\lambda_i}\frac{\partial\lambda_i}{\partial\varepsilon_a}\nonumber\\
+  &+
+  \sum_{i,j}\frac{\partial^2E}{\partial\lambda_i\partial\lambda_j}\frac{\partial\lambda_i}{\partial\varepsilon_a}\frac{\partial\lambda_j}{\partial\varepsilon_b}
+  + \sum_i\frac{\partial
+    E}{\partial\lambda_i}\frac{\partial^2\lambda_i}{\partial\varepsilon_a\partial\varepsilon_b}\label{eq:Full2ndorder}
+\end{align}
+Using Eqs.~\eqref{eq:varcondition} and~\eqref{eq:1ordervar}, we can
+rewrite the expression for the second-order variation in several
+different equivalent forms
+
+\begin{align}
+\frac{d^2E}{d\varepsilon_a d\varepsilon_b} &= \frac{\partial^2
+    E}{\partial\varepsilon_a\partial\varepsilon_b} +
+\sum_i\frac{\partial^2E}{\partial\varepsilon_a\partial\lambda_i}\frac{\partial\lambda_i}{\partial\varepsilon_b}\nonumber\\
+ &= \frac{\partial^2
+  E}{\partial\varepsilon_a\partial\varepsilon_b} +
+\sum_i\frac{\partial^2E}{\partial\varepsilon_b\partial\lambda_i}\frac{\partial\lambda_i}{\partial\varepsilon_a}\label{eq:2ndorder}\\ 
+ &= \frac{\partial^2
+  E}{\partial\varepsilon_a\partial\varepsilon_b} -
+\sum_{i,j}\frac{\partial^2
+  E}{\partial\varepsilon_a\partial\lambda_i}\left(\frac{\partial^2
+E}{\partial\lambda_i\partial\lambda_j}\right)^{-1}\frac{\partial^2 
+  E}{\partial\varepsilon_b\partial\lambda_j}\nonumber
+\end{align}
+Eq.~\eqref{eq:2ndorder} is somewhat pedantic, but together with
+Eq.~\eqref{Full2ndorder} it illustrates a number of important
+principles used in the evaluation of molecular response properties.
+
+First of all, Eq.~\eqref{eq:2ndorder} shows that we can calculate
+second-order corrections to the energy from a knowledge of the
+first-order variations in the wave function parameters only. This is
+again due to the variational condition, Eq.~\eqref{eq:varcondition}. This, as
+well as the Hellmann--Feynman theorem, are more general examples of
+what is referred to as the $2n+1$ rule of energy derivative theory:
+Knowing the perturbed wave function to order $n$, allows you to
+calculate energy corrections to order $2n+1$, often referred to as the
+Wigner $2n+1$ rule.~\cite{Hylleraas1930,Wigner1930} There exist
+different rules for order of perturbed variational parameters, and we
+will return briefly to this in Section~\ref{rsp_theory}.
+
+The two first lines of Eq.~\eqref{eq:2ndorder} also illustrates a
+second important principles, namely that we can generate the perturbed
+wave-function parameters from either of the two applied perturbations,
+$\varepsilon_a$ or $\varepsilon_b$. This is often referred to as the
+interchange theorem~\cite{Interchange} and allows you to determine the
+perturbed wave function for the perturbations with the fewest
+components. This is important computationally, as the most
+time-consuming step of a molecular property calculation is the
+determination of the perturbed wave function.
+
+As an example of how this can be utilized, consider the nuclear
+magnetic shielding constants determined in nuclear magnetic resonance
+spectroscopy (NMR).~\cite{ChemRev1999,ChemRev2012} These shielding constants are the mixed
+second-order derivatives of the molecular energy with respect to an
+external magnetic field and the nuclear magnetic moments. Whereas
+there are only three components of the magnetic field, there are three
+components of the magnetic moment of each atom in the molecule with a
+nuclear spin. Only the perturbed variational parameters for the the external
+magnetic field components thus need to be determined, and the cost of 
+calculating of shielding constants are thus largely independent of
+molecular size. The $2n+1$ rule and the interchange theorem has also
+been used with advantage to calculate all spin--spin coupling
+constants in C$_{60}$ in an efficient manner~\cite{JaszunskiC60} or to
+enable linear-scaling calculations of NMR shielding constants in large
+molecular systems.~\cite{Ochsenfeld}
+
+The last equality in Eq.~\eqref{eq:2ndorder} is not particularly
+important from a computationally point of view, as it would involve
+determining the perturbed variational parameters for all applied
+perturbations. However, it is a bridge to link energy-derivative
+theory to perturbation theory.
+
+We will not pursue these derivations any further, but just to
+illustrate the $2n+1$ rule, we here give the expression for the
+third-order energy correction using only first-order perturbed wave
+function parameters
+
+\begin{align}
+\label{eq:erg3}
+\frac{d^{3}E}{d\varepsilon_ad\varepsilon_bd\varepsilon_c}
+ & = 
+\frac{\partial^{3}E}{\partial\varepsilon_a\partial\varepsilon_b\partial\varepsilon_c}+\frac{\partial^{3}E}{\partial\varepsilon_a\partial\varepsilon_b\partial\lambda_{i}}\frac{\partial\lambda_{i}}{\partial\varepsilon_c}
+ \\ & \nonumber
+ +\frac{\partial^{3}E}{\partial\varepsilon_a\partial\varepsilon_c\partial\lambda_{i}}\frac{\partial\lambda_{i}}{\partial\varepsilon_b}
+ + 
+ \frac{\partial^{3}E}{\partial\varepsilon_b\partial\varepsilon_c\partial\lambda_{i}}\frac{\partial\lambda_{i}}{\partial\varepsilon_a}\\\nonumber
+& +
+ \frac{\partial^{3}E}{\partial\varepsilon_a\partial\lambda_{i}\partial\lambda_{j}}\frac{\partial\lambda_{i}}{\partial\varepsilon_b}\frac{\partial\lambda_{j}}{\partial\varepsilon_c}
+ +\frac{\partial^{3}E}{\partial\varepsilon_b\partial\lambda_{i}\partial\lambda_{j}}\frac{\partial\lambda_{i}}{\partial\varepsilon_c}\frac{\partial\lambda_{j}}{\partial\varepsilon_a}
+  \\ & \nonumber +
+ \frac{\partial^{3}E}{\partial\varepsilon_c\partial\lambda_{i}\partial\lambda_{j}}\frac{\partial\lambda_{i}}{\partial\varepsilon_b}\frac{\partial\lambda_{j}}{\partial\varepsilon_a}+\frac{\partial^{3}E}{\partial\lambda_{i}\partial\lambda_{j}\partial\lambda_{k}}\frac{\partial\lambda_{i}}{\partial\varepsilon_b}\frac{\partial\lambda_{j}}{\partial\varepsilon_a}\frac{\partial\lambda_{k}}{\partial\varepsilon_c}.\nonumber
+\end{align}
+In this case, we need to determine the first-order corrections to the
+variational parameters with respect to all applied perturbations. If
+one set of perturbation parameters have a significantly larger number
+of components than the other perturbations---Raman intensites involves
+for instance two electric fields with three components each and one
+set of nuclear displacement coordinates that have three components for
+each nucleus---an expression in which we actually calculate the
+second-order perturbed variational parameters with respect to the
+perturbations with few components may be advantageous
+
+\begin{align}
+\frac{d^{3}E}{d\varepsilon_ad\varepsilon_bd\varepsilon_c} & =
+\frac{\partial^{3}E}{\partial\varepsilon_a\partial\varepsilon_b\partial\varepsilon_c}+\frac{\partial^{3}E}{\partial\varepsilon_a\partial\varepsilon_b\partial\lambda_{i}}\frac{\partial\lambda_{i}}{\partial\varepsilon_c}
+\\ & \nonumber + \frac{\partial^{3}E}{\partial\varepsilon_a\varepsilon_c\partial\lambda_{i}}\frac{\partial\lambda_{i}}{\partial\varepsilon_b}
+\frac{\partial^{3}E}{\partial\varepsilon_a\partial\lambda_{i}\partial\lambda_{j}}\frac{\partial\lambda_{i}}{\partial\varepsilon_b}\frac{\partial\lambda_{j}}{\partial\varepsilon_c}\\\nonumber\\&+
+\frac{\partial^{2}E}{\partial\varepsilon_a\partial\lambda_{i}}\frac{\partial^{2}\lambda_{i}}{\partial\varepsilon_b\partial\varepsilon_c}.
+\end{align}
+where we do not need to determine the perturbed parameters with
+respect to the perturbation $\varepsilon_a$.
+
+\subsection{The connection between energy derivative theory and
+  perturbation theory}
+
+We will now establish the connection between variational perturbation theory as
+described in the previous section and the more conventional
+expressions obtained when considering Rayleigh--Schrödinger
+perturbation theory. One important consequence of this is that we
+connect the energy-derivative formulation used for variational
+perturbation theory to the conventional perturbation-theory
+expressions for exact states. This will allow to directly couple
+perturbation theory to the more general framework of energy-derivative
+theory, and which we will elaborate further on in
+Section~\ref{rsp_theory}. Furthermore, the exact-state theory
+expressions for molecular properties affords an analysis that allows
+us to see how we can extract properties that cannot directly be
+formulated as energy derivatives nevertheless can be formulated in
+this formalism by the correspondence to the exact-state perturbation
+theory expressions.
+
+Let us therefore assume that we have obtained all solutions to an
+unperturbed system---that is, that we know all eigenvalues and
+eigenstatues of the unperturbed Hamiltonian $\hat{H}^{(0)}$
+
+\begin{equation}
+\hat{H}^{(0)}\mid n^{(0)}\rangle = E_n^{(0)}\mid n^{(0)}\rangle\equiv
+\langle n^{(0)}\mid H^{(0)}\mid n^{(0)}\rangle = E_n
+\end{equation}
+The unperturbed state of the system is corresponds to the state with
+the lowest energy, $\mid 0\rangle = \mid n^{(0)}\rangle$.
+
+Applying now a set of perturbations $x=a,b,\ldots$ with perturbation strength
+$\varepsilon_x$, the Hamiltonian for the perturbed system can be written
+
+\begin{equation}
+\hat{H} = \hat{H}^{(0)} +
+\sum_{x=a,b,\ldots}\varepsilon_x\hat{H}^{(x)} +
+sum_{x,y=a,b,\ldots}\varepsilon_x\varepsilon_y\hat{H}^{(x,y)}+\ldots
+\end{equation}
+and in a similar manner write the variation in the energy as
+\begin{equation}
+E = E^{(0)} + \sum_{x=a,b\ldots}\varepsilon_xE^{^(x)} +
+\sum_{x,y=a,b,\ldots}\varepsilon_a\varepsilon_bE^{(x,y)} + \ldots\label{eq:Eexpansion}
+\end{equation}
+In the presence of the perturbed Hamiltonian, it is convenient to
+write the new ground-state $\mid\tilde{0}\rangle$ as
+
+\begin{equation}
+\mid\tilde{0}\rangle = \mid 0\rangle + \mid \delta 0\rangle = \mid
+0\rangle +\sum_{n\not =0}\lambda_n\mid n^{(0)}\rangle\label{eq:pertstate}
+\end{equation}
+where the last part of the equation follows from that the variations
+have to be orthogonal to the ground-state of the unperturbed
+system. To second order in energy corrections, we do not have to be concerned with the fact
+that the perturbed state as given by Eq.~\eqref{eq:pertstate} is not
+normalized. 
+
+The energy of the perturbed system can thus be written
+
+\begin{equation}
+E = \langle 0\mid \hat{H}\mid 0\rangle + \langle\delta 0\mid
+\hat{H}\mid \delta 0\rangle
+\end{equation}
+From Eq.~\eqref{eq:}, it then follows that the first-order correction
+to the energy when we apply a perturbation $\hat{H}^{(a)}$ is given as
+
+\begin{equation}
+\frac{dE}{d\varepsilon_a} = \langle
+0\mid\frac{\partial\hat{H}}{\partial\varepsilon_a}\mid 0\rangle =
+\langle 0\mid \hat{H}^{(a)}\mid 0\rangle
+\end{equation}
+since it the derivative is evaluated at zero perturbation strength and
+at zero variation in $\lambda_i$.
+
+
+
+
 \subsection{Open-ended response theory}
 \label{rsp_theory}
 
