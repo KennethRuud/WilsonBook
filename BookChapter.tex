@@ -787,7 +787,35 @@ A similar recursive product-rule algorithm can be constructed for the identifica
 \end{algorithmic}
 \end{algorithm}
 
-Having shown how the various contributions in response property calculations may be identified, we now turn to the actual evaluation of these contributions. 
+\fixme{Bin Gao: The following describes how OpenRSP library has been implemented from the point of view of software design. We need to consider how to merge it into this section.}
+
+The proposed open-ended response theory has been implemented in our developed
+library OpenRSP, which can be used by a computational chemistry
+program~(hereinafter named as host program) in a straightforward manner. As
+illustrated in Fig.~\ref{fig-openrsp-design}, the most complicated part
+``OpenRSP response'' is hidden from the host program, which involves the
+implementation of sophisticated response theory formulas and the aforementioned
+recursive formalism. Only a few application programming interfaces (APIs) are
+required to set on the side of a host program to make a call of OpenRSP
+properly for calculating either response functions or residues.
+
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=0.45\textwidth]{openrsp_design.pdf}
+  \caption{An overview of the software design of OpenRSP library.}
+  \label{fig-openrsp-design}
+\end{figure}
+
+However, special consideration and software design have to be taken into
+account in order to make OpenRSP library stand-alone and portable in different
+host programs. As shown in Fig.~\ref{fig-openrsp-design}, these two features
+can be achieved by:
+\begin{enumerate}
+  \item matrix operations, perturbations, Hamiltonian, and linear response equation solver
+  \item the adapter pattern in software engineering.
+\end{enumerate}
+
+Having shown how the various contributions in response property calculations may be identified, we now turn to the actual evaluation of these contributions.
 
 % Show use and utility of callback functionality, matrix operation mediation
 % Show grouping together of terms
