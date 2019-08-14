@@ -40,7 +40,7 @@
 %
   \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
         minimum height=20, text width=70, below of=OpenRSP-C-adapters, node distance=70, %
-        xshift=-150, yshift=0] (Perturbations) {Host program perturbations};
+        xshift=-150, yshift=0] (Perturbations) {Perturbations};
   \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
         minimum height=20, text width=45, below of=OpenRSP-C-adapters, node distance=70, %
         xshift=-100, yshift=-30] (Overlap) {Overlap operator};
@@ -70,7 +70,7 @@
 %  \draw [-latex'] (HostDriver) edge node[align=center, midway, yshift=15, text width=120] %
 %    {OpenRSP APIs (C or Fortran)} (OpenRSP);
   \draw [-latex'] (OpenRSP-C-API) edge node[align=center, midway, yshift=15, text width=120] %
-    {Calculate response functions or residues} (OpenRSP-response);
+    {Calculate molecular response properties} (OpenRSP-response);
   \draw [-latex'] (OpenRSP-response) edge node[align=left, midway, xshift=77, text width=145] %
     {Get information of perturbations, contributions from Hamiltonian, %
      and response parameters} (OpenRSP-C-adapters);
