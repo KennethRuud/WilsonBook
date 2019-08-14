@@ -1,12 +1,13 @@
 \documentclass{standalone}
 
-\usepackage[latin1]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
 
 \usepackage{tikz}
-\usetikzlibrary{arrows,calc}
+\usepackage{tikz-uml}
 
 %% generates a tightly fitting border around the work
 %\usepackage[active,tightpage]{preview}
@@ -14,81 +15,61 @@
 %\setlength\PreviewBorder{0.5mm}
 %%\renewcommand\PreviewBbAdjust{-\PreviewBorder 1mm -1.15mm -0.85mm}
 
-\usepackage{color}
+%\usepackage{color}
 
 %\pagestyle{empty}
+
+\tikzumlset{fill class=white, fill package=white}
 
 \begin{document}
 
 \begin{tikzpicture}[thick]
-  \node[color=black, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20] (OpenRSP-response) {OpenRSP response};
-  \node[color=black, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=85, left of=OpenRSP-response, node distance=190] %
-       (OpenRSP-C-API) {OpenRSP APIs};
-  \node[color=black, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=95, below of=OpenRSP-response, node distance=100] %
-       (OpenRSP-C-adapters) {OpenRSP adapters};
-  \node[color=black, dashed, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=160, minimum width=400, above of=OpenRSP-C-API, %
-        xshift=140, yshift=-70] (OpenRSP-library) %
-       {\begin{minipage}[t][5cm]{13.5cm}\textbf{OpenRSP library}\end{minipage}};
-%
-  \node[color=black, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=90, left of=OpenRSP-C-API, node distance=140] %
-       (HostDriver) {Host program's driver to call OpenRSP};
-%
-  \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=70, below of=OpenRSP-C-adapters, node distance=70, %
-        xshift=-150, yshift=0] (Perturbations) {Perturbations};
-  \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=45, below of=OpenRSP-C-adapters, node distance=70, %
-        xshift=-100, yshift=-30] (Overlap) {Overlap operator};
-  \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=60, below of=OpenRSP-C-adapters, node distance=70, %
-        xshift=-50, yshift=-60] (OneOper) {One-electron operators};
-  \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=60, below of=OpenRSP-C-adapters, node distance=70, %
-        xshift=0, yshift=-90] (TwoOper) {Two-electron operators};
-  \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=70, below of=OpenRSP-C-adapters, node distance=70, %
-        xshift=50, yshift=-60] (XCFun) {XC functionals};
-  \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=60, below of=OpenRSP-C-adapters, node distance=70, %
-        xshift=100, yshift=-30] (ZeroOper) {Zero-electron operators};
-  \node[color=red, fill=red!10, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, text width=75, below of=OpenRSP-C-adapters, node distance=70, %
-        xshift=150, yshift=0] (Solver) {Linear response equation solver};
-  \node[color=red, text badly centered, minimum height=20, text width=100, %
-        below of=HostDriver, node distance=240, xshift=180, yshift=0] (Callback) %
-       {\textbf{Host program's callback functions for OpenRSP}};
-%
-  \node[color=black, rectangle, draw, text badly centered, rounded corners, %
-        minimum height=20, below of=HostDriver, node distance=240] %
-       (QcMatrix) {QcMatrix library};
-%
-%  \draw [-latex'] (HostDriver) edge node[align=center, midway, yshift=15, text width=120] %
-%    {OpenRSP APIs (C or Fortran)} (OpenRSP);
-  \draw [-latex'] (OpenRSP-C-API) edge node[align=center, midway, yshift=15, text width=120] %
-    {Calculate molecular response properties} (OpenRSP-response);
-  \draw [-latex'] (OpenRSP-response) edge node[align=left, midway, xshift=77, text width=145] %
-    {Get information of perturbations, contributions from Hamiltonian, %
-     and response parameters} (OpenRSP-C-adapters);
-  \draw [-latex'] (OpenRSP-C-API) -- %
-    node[at end, align=left, xshift=75, yshift=25, text width=140] %
-    {Set information of perturbations, Hamiltonian, and linear response %
-     equation solver} (OpenRSP-C-API |- OpenRSP-C-adapters) |- (OpenRSP-C-adapters);
-  \draw [-latex'] (OpenRSP-library)--(QcMatrix);
-  \draw [-latex'] (HostDriver)--(OpenRSP-C-API);
-  \draw [-latex'] (OpenRSP-C-adapters)--(Perturbations);
-  \draw [-latex'] (OpenRSP-C-adapters)--(Overlap);
-  \draw [-latex'] (OpenRSP-C-adapters)--(OneOper);
-  \draw [-latex'] (OpenRSP-C-adapters)--(TwoOper);
-  \draw [-latex'] (OpenRSP-C-adapters)--(XCFun);
-  \draw [-latex'] (OpenRSP-C-adapters)--(ZeroOper);
-  \draw [-latex'] (OpenRSP-C-adapters)--(Solver);
-  \draw [-latex'] (HostDriver)--(QcMatrix);
-  \draw [-latex'] (Callback)--(QcMatrix);
+  \begin{umlpackage}[x=0, y=0]{Host program}
+    \umlsimpleclass[x=0, y=9]{Driver of OpenRSP}
+    \umlsimpleclass[x=0, y=7.5]{Perturbation callback functions}
+    \umlsimpleclass[x=0, y=6.5]{Overlap operator callback function}
+    \umlsimpleclass[x=0, y=5.5]{Zero-electron operator callback functions}
+    \umlsimpleclass[x=0, y=4.5]{One-electron operator callback functions}
+    \umlsimpleclass[x=0, y=3.5]{Two-electron operator callback functions}
+    \umlsimpleclass[x=0, y=2.5]{Exchange-correlation functional callback functions}
+    \umlsimpleclass[x=0, y=1.5]{Linear response equation solver callback function}
+    \umlsimpleclass[x=0, y=0]{Host program matrix}
+  \end{umlpackage}
+
+  \begin{umlpackage}[x=12, y=0]{OpenRSP library}
+    \umlsimpleclass[x=0, y=9]{OpenRSP APIs}
+    \umlsimpleclass[x=9, y=9]{OpenRSP response}
+    \umlsimpleclass[x=0, y=3]{OpenRSP adapters}
+    \umldep[arg1=<<calculate properties>>, pos1=0.5]{OpenRSP APIs}{OpenRSP response}
+    \umldep[arg1=<<set host program's callback functions>>, pos1=0.5]{OpenRSP APIs}{OpenRSP adapters}
+    \umldep[geometry=|-, arg1=<<invoke host program's callback functions>>, pos1=1.5]{OpenRSP response}{OpenRSP adapters}
+  \end{umlpackage}
+
+  \begin{umlpackage}[x=12, y=-3]{QcMatrix library}
+    \umlsimpleclass[x=0, y=3]{QcMatAdapter}
+    \umlsimpleclass[x=0, y=1]{QcMat}
+    \umlcompo[arg1=<<has>>, pos1=0.5]{QcMat}{QcMatAdapter}
+  \end{umlpackage}
+
+  \umldep[geometry=|-, arg1=<<use>>, pos1=0.5]{OpenRSP library}{QcMat}
+  \umldep[geometry=-|-, arm1=-3.5cm, arg1=<<invoke>>, pos1=0.5, anchor1=174]{OpenRSP adapters}{Perturbation callback functions}
+  \umldep[geometry=-|-, anchor1=176]{OpenRSP adapters}{Overlap operator callback function}
+  \umldep[geometry=-|-, anchor1=178]{OpenRSP adapters}{Zero-electron operator callback functions}
+  \umldep[geometry=-|-, anchor1=180]{OpenRSP adapters}{One-electron operator callback functions}
+  \umldep[geometry=-|-, anchor1=182]{OpenRSP adapters}{Two-electron operator callback functions}
+  \umldep[geometry=-|-, anchor1=184]{OpenRSP adapters}{Exchange-correlation functional callback functions}
+  \umldep[geometry=-|-, anchor1=186]{OpenRSP adapters}{Linear response equation solver callback function}
+
+  \umldep[arg1=<<use>>, pos1=0.5]{QcMatAdapter}{Host program matrix}
+
+  \umldep[arg1=<<set callback functions or calculate properties>>, pos1=0.5]{Driver of OpenRSP}{OpenRSP APIs}
+  \umlHVHdep[arm1=-5cm, arg1=<<use>>, pos1=2.5]{Driver of OpenRSP}{QcMat}
+  \umlHVHdep[arm1=-5cm]{Overlap operator callback function}{QcMat}
+  \umlHVHdep[arm1=-5cm]{Zero-electron operator callback functions}{QcMat}
+  \umlHVHdep[arm1=-5cm]{One-electron operator callback functions}{QcMat}
+  \umlHVHdep[arm1=-5cm]{Two-electron operator callback functions}{QcMat}
+  \umlHVHdep[arm1=-5cm]{Exchange-correlation functional callback functions}{QcMat}
+  \umlHVHdep[arm1=-5cm]{Linear response equation solver callback function}{QcMat}
 \end{tikzpicture}
 
 \end{document}
