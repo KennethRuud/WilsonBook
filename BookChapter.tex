@@ -823,7 +823,7 @@ of a host program.
 
 \begin{figure}[hbt]
   \centering
-  \includegraphics[width=0.45\textwidth]{openrsp_design.pdf}
+  \includegraphics[width=0.47\textwidth]{openrsp_design.pdf}
   \caption{An overview of the software design of OpenRSP library.}
   \label{fig-openrsp-design}
 \end{figure}
@@ -860,8 +860,8 @@ host programs for the evaluations of operators in the Hamiltonian.
 Last but not least, to also make use of host programs' matrix operations, we
 have developed another stand-alone library QcMatrix (Version 0.1.0,
 https://gitlab.com/bingao/qcmatrix), which can work as an adapter by (i) making
-use of host programs' matrix operations and (ii) providing appropriate complex
-matrix operations to OpenRSP library.
+use of host programs' matrix operations via ``QcMatAdapter'' and (ii) providing
+appropriate complex matrix ``QcMat'' and its operations to OpenRSP library.
 
 \subsubsection{Algorithms for the recursive evaluation of molecular response properties}
 \label{subsubsection-recursive-algorithms}
